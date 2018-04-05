@@ -6,6 +6,7 @@ import android.view.View;
 import android.content.Intent;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.math.BigDecimal;
 
@@ -42,27 +43,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        Intent intent = new Intent(this, SecondActivity.class);
-        dbl1 = Double.parseDouble(mEditText1.getText().toString());
-        dbl2 = Double.parseDouble(mEditText2.getText().toString());
-        if (v.getId() == R.id.button1) {
-            dblRet = dbl1 + dbl2;
-            intent.putExtra("VALUE", dblRet);
+        try{
+            Intent intent = new Intent(this, SecondActivity.class);
+            BigDecimal bdc1 = new BigDecimal(mEditText1.getText().toString());
+            BigDecimal bdc2 = new BigDecimal(mEditText2.getText().toString());
 
-        } else if (v.getId() == R.id.button2) {
-            dblRet = dbl1 - dbl2;
-            intent.putExtra("VALUE", dblRet);
+            if (v.getId() == R.id.button1) {
+                BigDecimal bdcResult = bdc1.add(bdc2);
+                intent.putExtra("VALUE", bdcResult.toString());
 
-        } else if (v.getId() == R.id.button3) {
-            dblRet = dbl1 * dbl2;
-            intent.putExtra("VALUE", dblRet);
+            } else if (v.getId() == R.id.button2) {
+                BigDecimal bdcResult = bdc1.subtract(bdc2);
+                intent.putExtra("VALUE", bdcResult.toString());
 
-        } else if (v.getId() == R.id.button4) {
-            dblRet = dbl1 / dbl2;
-            intent.putExtra("VALUE", dblRet);
+            } else if (v.getId() == R.id.button3) {
+                BigDecimal bdcResult = bdc1.multiply(bdc2);
+                intent.putExtra("VALUE", bdcResult.toString());
 
+            } else if (v.getId() == R.id.button4) {
+                BigDecimal bdcResult = bdc1.divide(bdc2);
+                intent.putExtra("VALUE", bdcResult.toString());
+
+            }
+            startActivity(intent);
         }
-        startActivity(intent);
+        catch (Exception e){
+            Toast toast = Toast.makeText(
+                    this, "予期せぬエラーが発生しました。", Toast.LENGTH_SHORT);
+            toast.show();
+            mEditText1.requestFocus();
+        }
+
     }
 
 }
